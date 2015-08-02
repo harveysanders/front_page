@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Front Page</title>
+	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+	function getRSSFeed(url, callback) {
+		$.ajax({
+            type:"GET",
+            dataType:"jsonp",
+            url:"http://ajax.googleapis.com/ajax/services/feed/load",
+            data:{"v":"1.0", "num":"10", "q":url},
+
+            success: function(result){
+                //.....
+                console.log(result);
+                callback(result);
+            }
+        });
+	}
+	</script>
+</body>
+</html>
