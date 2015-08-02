@@ -1,4 +1,4 @@
-var DataStore = function () {
+(function (window) {
 	/**
 	*	The key we use to store the data in localStorage is made up of two parts:
 	*	* The key prefix is just a namespace, in case we end up wanting to store different kinds of
@@ -20,10 +20,8 @@ var DataStore = function () {
 		};
 	};
 
-	/**
-	*	Data store API: load, save, clear, set_profile
-	*/
-	return {
+	window.frontpage = window.frontpage || {};
+	window.frontpage.dataStore = {
 		load: function () {
 			var data = localStorage.getItem (getKey ());
 			if (data) {
@@ -42,4 +40,4 @@ var DataStore = function () {
 			profile = new_profile;
 		}
 	};
-}();
+}(window));
