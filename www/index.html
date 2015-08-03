@@ -3,23 +3,59 @@
 <head>
 	<title>Front Page</title>
 	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+	<!-- I know this is bootleg. Don't laugh... I'm using this js file to test the functions on the console. This is what unit test are for, huh?-->
+	<script type="text/javascript" src="data/testData.js"></script> 
 </head>
 <body>
 	<script type="text/javascript">
-	function getRSSFeed(url, callback) {
-		$.ajax({
-            type:"GET",
-            dataType:"jsonp",
-            url:"http://ajax.googleapis.com/ajax/services/feed/load",
-            data:{"v":"1.0", "num":"10", "q":url},
+		var data
+			;
 
-            success: function(result){
-                //.....
-                console.log(result);
-                callback(result);
-            }
-        });
-	}
+		function getRSSFeed(url, callback) {
+			$.ajax({
+	            type:"GET",
+	            dataType:"jsonp",
+	            url:"http://ajax.googleapis.com/ajax/services/feed/load",
+	            data:{"v":"1.0", "num":"10", "q":url},
+
+	            success: function(result){
+	                //.....
+	                console.log(result);
+	                callback(result);
+	            }
+	        });
+		}
+		function importFeed(RSSData) {
+			var RSSFeed = RSSData.responseData.feed;
+			var currTime = Date.now();
+			var feedItems = RSSFeed.entries;
+
+			data = {
+				version: 1,
+				profile: "main",
+				feeds: [
+					{
+						title: RSSFeed.title,
+						description: RSSFeed.description,
+						feed_url: RSSFeed.feedUrl,
+						url: RSSFeed.link,
+						updated_at: currTime,
+						items: []
+					}
+				]
+			};
+
+			for (var i=0; i<feedItems.length; i++) {
+				var item = {};
+				item.title = feedItems[i].title;
+				item.contentSnippet = feedItems[i].contentSnippet;
+				item.url = feedItems[i].link;
+				item.published_at = feedItems[i].publishedDate;
+				item.is_read = false;
+				data.feeds[0].items.push(item); //confused on which index of feeds to push to.
+			}return data;
+		}
+
 	</script>
 </body>
 </html>
