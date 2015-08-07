@@ -1,5 +1,5 @@
-(function( window ) {
-
+//(function( window ) {
+	
 	// example usage
 	// getRSSFeed('http://www.npr.org/rss/rss.php?id=1007', function(result){
 	// 	console.log(result.responseData.feed.description);
@@ -62,7 +62,7 @@
 		var currTime = Date.now();
 		var feedItems = RSSFeed.entries;
 
-		data = {
+		var data = {
 			title: RSSFeed.title,
 			description: RSSFeed.description,
 			feed_url: RSSFeed.feedUrl,
@@ -115,7 +115,11 @@
 	 * data.feeds[feedIndex] and then replace data.feeds[feedIndex] with feed
 	 */
 	 function updateFeed (data, feedIndex, feed) {
+	 	var existingFeed = data.feeds[feedIndex];
+	 	for (var i=0; i<existingFeed.items.length; i++) {
 
+	 	}
+	 	existingFeed = feed; //fix so isRead is not overwritten.
 	 }
 
-}(window));
+//}(window));
