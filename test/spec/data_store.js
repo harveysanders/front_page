@@ -1,21 +1,7 @@
 describe("Data Store", function() {
-	var sampleFeed = {
-		title: "Coding Horror",
-		description: "programming and human factors",
-		url: "http://blog.codinghorror.com",
-		feed_url: "http://blog.codinghorror.com/rss",
-		updated_at: 1438573955514,
-		items: [ {
-			title: "Article Title",
-			description: "Article description",
-			url: "http://blog.codinghorror.com/doing-terrible-things-to-your-code/",
-			published_at: 1438248709000,
-			is_read: false
-		} ]
-	};
-
 	//	init
 	var store1, store2;
+	var sampleFeed = window.fixture.sampleFeedOne;
 	beforeEach(function() {
 		store1 = frontpage.newDataStore ('test1');
 		store1.clearFeeds ();
