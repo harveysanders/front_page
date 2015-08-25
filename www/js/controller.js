@@ -71,29 +71,37 @@
 			items: []
 		};
 
-		for (var i=0; i<feedItems.length; i++) {
-			var item = {};
-			item.title = feedItems[i].title;
-			item.contentSnippet = feedItems[i].contentSnippet;
-			item.url = feedItems[i].link;
-			item.published_at = feedItems[i].publishedDate;
-			item.is_read = false;
-			data.items.push(item); 
-		}return data;
+		feedItems.map(function(item){
+			var formattedItem = {};
+			formattedItem.title = item.title;
+			formattedItem.contentSnippet = item.contentSnippet;
+			formattedItem.url = item.link;
+			formattedItem.published_at = item.publishedDate;
+			formattedItem.is_read = false;
+			data.items.push(formattedItem);
+		});
+		return data;
 	 }
 	 
 	/**
 	 * Part 2: find out if our current data already contains this feed, and if so at which index in data.feeds
 	 * We're probably just looping through and looking at the feed_url
 	 */
-	 function getFeedIndex (data, feed) {
+	 function getFeedIndex (feed, data) { //how do I pass 'data' in to the callback?
 	 	var key = feed.feed_url;
 	 	var feeds = data.feeds;
-	 	for (var i=0; i<feeds.length; i++) {
-	 		if (feeds[i].feed_url === key) {
-	 			return i;
+	 	feeds.map(function(item, index){
+	 		if (item.feed_url === key){
+	 			return index;
 	 		}
-	 	} return -1;
+	 		return -1;
+	 	});
+
+	 	// for (var i=0; i<feeds.length; i++) {
+	 	// 	if (feeds[i].feed_url === key) {
+	 	// 		return i;
+	 	// 	}
+	 	// } return -1;
 	 }
 	  
 	/**
@@ -102,7 +110,7 @@
 	 * but sometimes reading a well-named function call (not that I've chosen the best names)
 	 * makes it way easier to follow by letting your brain stay in the higher-level logic. 
 	 */
-	 function insertNewFeed(data, feed) { data.feeds.push(feed); }
+	 function appendNewFeed(data, feed) { data.feeds.push(feed); }
 
 	/**
 	 * Part 3b: If part 2 decides we DO already have this feed,
