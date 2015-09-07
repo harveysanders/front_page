@@ -3,15 +3,15 @@ describe("Data Store", function() {
 	var store1, store2;
 	var sampleFeed = window.fixture.sampleFeedOne;
 	beforeEach(function() {
-		store1 = frontpage.newDataStore ('test1');
+		store1 = frontpage.getDataStore ('test1');
 		store1.clearFeeds ();
 
-		store2 = frontpage.newDataStore ('test2');
+		store2 = frontpage.getDataStore ('test2');
 		store2.clearFeeds ();
 	});
 
 	it("should load the 'main' profile when none is provided", function() {
-		var mainStore = frontpage.newDataStore ();
+		var mainStore = frontpage.getDataStore ();
 		var feedData = mainStore.loadFeeds ();
 		expect (feedData.profile).toEqual ('main');
 	});

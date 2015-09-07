@@ -53,6 +53,17 @@ describe("UI", function() {
 		expect($feed.find('li').length).toEqual ($feed.find('li.read').length);
 	});
 
+	it("triggers the 'feedDeleted' event when a feed is deleted", function () {
+		var handler = jasmine.createSpy ('handler');
+		ui.bind('feedDeleted', handler);
+
+		var feedCount = $("#feedUI .feed").length;
+		var $feed = $("#feedUI .feed").first ();
+		$feed.find(".deleteFeed").trigger ('click');
+		expect(handler).toHaveBeenCalledWith($feed.attr ('data-feedurl'));
+		expect($("#feedUI .feed").length).toEqual (feedCount - 1);
+	});
+
 	it("can be updated when the data changes", function () {
 		var newData = $.extend(true, {}, fixture.sampleDataOne);
 		newData.feeds[0].items.push({
@@ -71,5 +82,19 @@ describe("UI", function() {
 		$feeds = $("#feedUI .feed");
 		expect ($feeds.length).toEqual (initialFeedCount);
 		expect ($feeds.first ().find('li').length).toEqual (initialItemCount + 1);
+	});
+
+	it("resets the URL input when refreshing the UI", function () {
+		$("#feedUI .newFeedURL").val ('http://www.test.com/rss');
+		ui.refresh (fixture.sampleDataOne);
+		expect($("#feedUI .newFeedURL").val ()).toEqual ('');
+	});
+
+	it("doesn't change anything on refresh if the data is the same", function () {
+		var startingText = $.trim ($("#feedUI").text ());
+		expect (startingText).not.toEqual ('');
+		ui.refresh (fixture.sampleDataOne);
+		ui.refresh (fixture.sampleDataOne);
+		expect($.trim ($("#feedUI").text ())).toEqual (startingText);
 	});
 });

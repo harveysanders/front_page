@@ -53,7 +53,7 @@
 	*	Expose a method for creating a data store linked to a particular profile
 	*/
 	extend.frontpage = extend.frontpage || {};
-	extend.frontpage.newDataStore = function (profile) {
+	extend.frontpage.getDataStore = function (profile) {
 		return new DataStore (profile);
 	};
 }(this));

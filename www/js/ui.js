@@ -1,7 +1,4 @@
 (function (extend) {
-	/**
-	*	Helpers for painting the UI
-	*/
 	function loadAndInjectTemplates(callback){
 		$.get('../templates.html', function (templateHTML) {
 			$('body').append (templateHTML);
@@ -25,7 +22,17 @@
 	function updateFeeds(container, feeds) {
 		$.each(feeds, function (index, feed) {
 			var $feed = getFeedContainer(container, feed.feed_url);
-			$feed.find('h2').text(feed.title);
+			var $header = $feed.find('h2');
+			$header.html('');
+			if (feed.url) {
+				$('<a/>', {
+					text: feed.title,
+					href: feed.url,
+					target: "_blank"
+				}).appendTo ($header);
+			} else {
+				$header.text(feed.title);
+			}
 			updateFeedItems($feed, feed.items);
 		});
 	}
@@ -73,6 +80,12 @@
 			if (url) {
 				ui.trigger ('feedAdded', url);
 			}
+		}).on ('click', '.deleteFeed', function (e) {
+			var $feed = $(this).parents ('.feed');
+			var url = $feed.attr ('data-feedurl');
+			$feed.remove ();
+			ui.trigger ('feedDeleted', url);
+			e.preventDefault ();
 		});
 	}
 
@@ -85,6 +98,7 @@
 			feedAdded: function(feed_url) {},
 			feedRead: function(feed_url) {},
 			itemRead: function(item_url) {},
+			feedDeleted: function(item_url) {},
 		};
 	}
 	UI.prototype.init = function(data, callback) {
@@ -99,6 +113,7 @@
 	};
 	UI.prototype.refresh = function(data, callback) {
 		updateFeeds(this.container, data.feeds);
+		$(this.container).find ('.newFeedUI input.newFeedURL').val ('');
 		if (typeof callback === 'function'){
 			callback ();
 		}
@@ -106,6 +121,9 @@
 	UI.prototype.bind = function(eventName, handler) {
 		this.eventHandlers[eventName] = handler;
 	};
+	UI.prototype.bindEvent = function (eventName, handler) {
+		this.bind (eventName, handler);
+	}
 	UI.prototype.trigger = function(eventName, eventInfo) {
 		console.log ('triggering event "' + eventName + '"', eventInfo);
 		this.eventHandlers[eventName](eventInfo);

@@ -1,100 +1,74 @@
-(function( window ) {
-	var data
-		;
+(function( extend ) {
 
-	function getRSSFeed(url, callback) {
-		$.ajax({
-	        type:"GET",
-	        dataType:"jsonp",
-	        url:"http://ajax.googleapis.com/ajax/services/feed/load",
-	        data:{"v":"1.0", "num":"10", "q":url},
+	var default_options = {
+		refresh_frequency: 60 * 60 * 2,	//	don't refresh a feed more often than every X seconds 
+	};
 
-	        success: function(result){
-	            
-	            console.log(result);
-	            callback(result);
-	        }
-	    });
+	function Controller (components, options) {
+		this.dataStore = components.dataStore;
+		this.ui = components.ui;
+		this.rss = components.rss;
+		this.options = $.extend({}, default_options, options);
+
+		this.ui.bindEvent ('feedAdded', this.addFeed.bind(this));
+		this.ui.bindEvent ('feedDeleted', this.deleteFeed.bind(this));
+		this.ui.bindEvent ('itemRead', this.markItemRead.bind(this));
+		this.ui.bindEvent ('feedRead', this.markFeedRead.bind(this));
 	}
-	function importFeed(RSSData) {
-		var RSSFeed = RSSData.responseData.feed;
-		var currTime = Date.now();
-		var feedItems = RSSFeed.entries;
-
-		data = {
-			version: 1,
-			profile: "main",
-			feeds: [
-				{
-					title: RSSFeed.title,
-					description: RSSFeed.description,
-					feed_url: RSSFeed.feedUrl,
-					url: RSSFeed.link,
-					updated_at: currTime,
-					items: []
+	Controller.prototype.run = function () {
+		this.data = this.dataStore.loadFeeds ();
+		this.ui.init (this.data);
+		this.refreshFeeds.bind(this);
+	};
+	Controller.prototype.addFeed = function (url) {
+		this.rss.fetch (url, this.processFetchedFeed.bind(this));
+	};
+	Controller.prototype.processFetchedFeed = function (feed) {
+		frontpage.dataset.mergeFeedInfo (this.data, feed);
+		this.dataStore.saveFeeds (this.data);
+		this.ui.refresh(this.data);
+	};
+	Controller.prototype.markItemRead = function (url) {
+		frontpage.dataset.markItemRead (this.data, url);
+		this.dataStore.saveFeeds (this.data);
+	};
+	Controller.prototype.markFeedRead = function (url) {
+		frontpage.dataset.markFeedRead (this.data, url);
+		this.dataStore.saveFeeds (this.data);
+	};
+	Controller.prototype.deleteFeed = function (url) {
+		frontpage.dataset.removeFeed (this.data, url);
+		this.dataStore.saveFeeds (this.data);
+	};
+	Controller.prototype.refreshFeeds = function (queue) {
+		//	if queue is not passed, it means refresh all
+		if (typeof queue === 'undefined') {
+			queue = [];
+			var now = Math.floor(Date.now() / 1000);
+			for (var i = 0; i < this.data.feeds.length; i++) {
+				if (now - this.data.feeds[i].updated_at > this.options.refresh_frequency) {
+					queue.push (this.data.feeds[i].feed_url);
 				}
-			]
-		};
+			}
+		}
+		if (queue.length == 0) {
+			return;	//	nothing to do
+		}
 
-		for (var i=0; i<feedItems.length; i++) {
-			var item = {};
-			item.title = feedItems[i].title;
-			item.contentSnippet = feedItems[i].contentSnippet;
-			item.url = feedItems[i].link;
-			item.published_at = feedItems[i].publishedDate;
-			item.is_read = false;
-			data.feeds[0].items.push(item); //confused on which index of feeds to push to.
-		}return data;
-	}
+		//	fetch one feed. when it's done, call refreshFeeds again to work down the queue
+		var controller = this;
+		this.rss.fetch (queue.pop (), function (feed) {
+			controller.processFetchedFeed (feed);
+			controller.refreshFeeds (queue);
+		});
+	};
 
 	/**
- *	Part 1: put the RSS feed data into our format
- *  This function would take in the data as it comes from the RSS API and return something like
- * 	{
- *		title: "Feed title",
- * 		url: "http://blogurl.com",
- * 		feed_url: "http://blogurl.com/rss",
- * 		...
- * 		items: [
- * 			{	title: "article one", url: "http://blogurl.com/1", ... },
- * 			...
- * 		]
- *	}
- * 
- * The proper place to call this is probably INSIDE getRSSFeed before calling the callback,
- * since this method needs to know which properties the RSS feed supplies. Then everything outside
- * of getRSSFeed (and this helper) can be oblivious of all details about the source of the data.
- */
- function extractRSSFeedInfo (rawFeedObject) {
+	*	Expose a method for creating a controller
+	*/
+	extend.frontpage = extend.frontpage || {};
+	extend.frontpage.getController = function(components, options) {
+		return new Controller(components, options);
+	};
 
- }
- 
-/**
- * Part 2: find out if our current data already contains this feed, and if so at which index in data.feeds
- * We're probably just looping through and looking at the feed_url
- */
- function getFeedIndex (data, feed) {
-
- }
-  
-/**
- * Part 3a: If Part 2 decides we DON'T already have this feed,
- * we can probably just insert it at the end. This may not need to be a function of its own,
- * but sometimes reading a well-named function call (not that I've chosen the best names)
- * makes it way easier to follow by letting your brain stay in the higher-level logic. 
- */
- function insertNewFeed(data, feed) { data.feeds.push(feed); }
-
-/**
- * Part 3b: If part 2 decides we DO already have this feed,
- * we need to update data.feeds[feedIndex] with the new data in feed
- * 
- * For the most part, the new info in feed is going to supercede anything
- * we have stored. The exceptions would be any additional info we added,
- * that's not provided by the RSS feed; so far I think the is_read bit is it.
- * So... we could just update the is_read bits of feed with whatever's in
- * data.feeds[feedIndex] and then replace data.feeds[feedIndex] with feed
- */
- function updateFeed (data, feedIndex, feed) { }
-
-}(window));
+}(this));
