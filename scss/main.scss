@@ -1,6 +1,123 @@
+$color_bg:#f5f5f9;
+$color_text:#222a33;
+$color_link:$color_text;
+$color_link_read:lighten($color_link, 35%);
 
-body{
-	background:#f5f5f5;
+@mixin card{
+	background:white;
+	box-shadow:	0 1px 2px 0 rgba(0,0,0,0.16),
+				0 1px 3px 0 rgba(0,0,0, 0.12);
 }
-a{ color: #00d; }
-a:visited, .read a{ color: #09d; }
+@mixin body_font{
+	font-family:'Open Sans',sans-serif;
+	font-weight:400;
+}
+@mixin read{
+	color:$color_link_read;
+	font-weight:400;
+}
+@mixin title_font{
+	font-family:'Oswald',sans-serif;
+	font-weight:400;
+}
+
+
+//	GLOBAL / SHARED
+body{
+	background:$color_bg;
+	color:$color_text;
+	padding:1rem;
+	@include body_font;
+}
+
+ul{	margin: 0; padding: 0;	}
+li{	list-style:none; margin: 0; padding:0; }
+
+
+li.feed{
+	$padding: 0.3rem 0.7rem;
+	padding-bottom:3rem;
+	position:relative;
+	min-width:315px;
+	width:30%;
+	float:left;
+	min-height: 23rem;
+	@include card;
+	margin: 1rem 1rem 0 0;
+	h2
+	{
+		margin:0;
+		padding: $padding;
+		background:$color_text;
+		font-size:1.2em;
+		@include title_font;
+		&,a{
+			color:$color_bg;
+			text-decoration:none;
+		}
+	}
+	ul{
+		padding:$padding;
+		li{
+			padding:0.25em 0;
+			font-size:0.8em;
+			border-bottom:1px solid #eef;
+			a{
+				color: $color_link;
+				text-decoration:none;
+				font-weight:700;
+				&:visited{ @include read; }
+			}
+			&.read a{ @include read; }
+		}
+	}
+	.markRead, .deleteFeed{
+		position:absolute;
+		bottom: 0.5rem;
+		color:#ccc;
+		padding: 0.2rem 0.4rem;
+		text-decoration:none;
+		&:hover{
+			background:#ccc;
+			color:#fff;
+		}
+	}
+	.markRead{
+		left: 0.5rem;
+	}
+	.deleteFeed{
+		right: 0.5rem;
+	}
+}
+
+.newFeedUI{
+	input,button{
+		padding: 0.2rem 0.4rem;
+	}
+	input{
+		width: 300px;
+	}
+}
+
+@media (max-width: 1000px){
+	li.feed{
+		width:46%;
+	}
+}
+@media (max-width: 715px){
+	li.feed{
+		width:auto;
+		float:none;
+	}
+}
+@media (max-width: 400px){
+	body{
+		padding: 0.3rem;
+	}
+	li.feed{
+		max-width:0;
+	}
+	.newFeedUI input{
+		width:240px;
+	}
+}
