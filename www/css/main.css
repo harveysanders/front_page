@@ -1,2 +1,8 @@
-a{ color: #00d; }
-a:visited, .read a{ color: #09d; }
+body {
+  background: #f5f5f5; }
+
+a {
+  color: #00d; }
+
+a:visited, .read a {
+  color: #09d; }
