@@ -82,7 +82,8 @@
 	}
 	function getFaviconFromLink (url) {
 		var firstSlash = url.indexOf('/', 8);
-		return url.substr (0, firstSlash) + '/favicon.ico';
+		var domain = (firstSlash === -1) ? url : url.substr (0, firstSlash);
+		return domain + '/favicon.ico';
 	}
 
 	function bindEvents (container, ui) {
