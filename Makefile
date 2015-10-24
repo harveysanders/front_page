@@ -3,8 +3,8 @@ SASSHOME = scss/
 CSSHOME = www/css/
 
 watch:
-	$(SASSC) --quiet --watch $(SASSHOME):$(CSSHOME) > /dev/null 2>&1 &
+	$(SASSC) --sourcemap=none --quiet --watch $(SASSHOME):$(CSSHOME) > /dev/null 2>&1 &
 
 build:
-	$(SASSC) --trace --stop-on-error --update $(SASSHOME):$(CSSHOME)
+	$(SASSC) --sourcemap=none --trace --stop-on-error --update $(SASSHOME):$(CSSHOME)
 

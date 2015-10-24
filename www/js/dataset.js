@@ -28,6 +28,15 @@
 		});
 		data.feeds[feedIndex] = feed;
 	}
+	
+	function sortFeeds (data, feed_urls) {
+		var old_feeds = data.feeds;
+		data.feeds = [];
+		for (var i = 0; i < feed_urls.length; i++) {
+			var index = getFeedIndex ({ feeds: old_feeds }, feed_urls[i]);
+			data.feeds.push (old_feeds[index]);
+		}
+	}
 
 	/**
 	*	dataset helper methods
@@ -71,6 +80,9 @@
 			$.each(data.feeds[feedIndex].items, function (index, item) {
 				data.feeds[feedIndex].items[index].is_read = true;
 			});
+		},
+		sortFeeds: function (data, feed_urls) {
+			sortFeeds (data, feed_urls);
 		}
 	};
 }(this));

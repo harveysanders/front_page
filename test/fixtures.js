@@ -18,7 +18,7 @@ window.fixture = {
 			published_at: 1438248709000,
 			is_read: true
 		}, {
-			title: "Welcome to the Internet of Compromised Things",
+			title: "Welcome to the Internet of Compromised Things But this time the title is longer and longer and longer",
 			description: "Just ranting about insecure routers and other hardware",
 			url: "http://blog.codinghorror.com/welcome-to-the-internet-of-compromised-things/",
 			published_at: 1438248709000,

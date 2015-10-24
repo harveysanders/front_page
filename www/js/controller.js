@@ -1,7 +1,7 @@
 (function( extend ) {
 
 	var default_options = {
-		refresh_frequency: 60 * 60 * 2,	//	don't refresh a feed more often than every X seconds 
+		refresh_frequency: 60 * 60 * 2	//	don't refresh a feed more often than every X seconds 
 	};
 
 	function Controller (components, options) {
@@ -14,11 +14,13 @@
 		this.ui.bindEvent ('feedDeleted', this.deleteFeed.bind(this));
 		this.ui.bindEvent ('itemRead', this.markItemRead.bind(this));
 		this.ui.bindEvent ('feedRead', this.markFeedRead.bind(this));
+		this.ui.bindEvent ('feedsSorted', this.sortFeeds.bind(this));
+		this.ui.bindEvent ('refreshFeed', this.refreshFeed.bind(this));
 	}
 	Controller.prototype.run = function () {
 		this.data = this.dataStore.loadFeeds ();
 		this.ui.init (this.data);
-		this.refreshFeeds.bind(this);
+		this.refreshFeeds();
 	};
 	Controller.prototype.addFeed = function (url) {
 		this.rss.fetch (url, this.processFetchedFeed.bind(this));
@@ -60,6 +62,16 @@
 		this.rss.fetch (queue.pop (), function (feed) {
 			controller.processFetchedFeed (feed);
 			controller.refreshFeeds (queue);
+		});
+	};
+	Controller.prototype.sortFeeds = function (feed_urls) {
+		frontpage.dataset.sortFeeds (this.data, feed_urls);
+		this.dataStore.saveFeeds (this.data);
+	};
+	Controller.prototype.refreshFeed = function (url) {
+		var controller = this;
+		this.rss.fetch (url, function (feed) {
+			controller.processFetchedFeed (feed);
 		});
 	};
 

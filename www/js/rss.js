@@ -1,6 +1,6 @@
 (function (extend) {
 	var default_options = {
-		article_count: 10
+		article_count: 10,
 	};
 
 	/**
@@ -35,7 +35,6 @@
 			items: []
 		};
 		for (var i = 0; i < rawFeed.entries.length; i++) {
-			var item = {};
 			feed.items.push ({
 				title: rawFeed.entries[i].title,
 				description: rawFeed.entries[i].contentSnippet.substr (0, 30) + '...',

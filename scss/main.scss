@@ -28,6 +28,7 @@ body{
 	color:$color_text;
 	padding:1rem;
 	@include body_font;
+	font-size:14px;
 }
 
 ul{	margin: 0; padding: 0;	}
@@ -38,10 +39,9 @@ li.feed{
 	$padding: 0.3rem 0.7rem;
 	padding-bottom:3rem;
 	position:relative;
-	min-width:315px;
-	width:30%;
+	min-width:215px;
+	width:23%;
 	float:left;
-	min-height: 23rem;
 	@include card;
 	margin: 1rem 1rem 0 0;
 	h2
@@ -55,9 +55,16 @@ li.feed{
 			color:$color_bg;
 			text-decoration:none;
 		}
+		img{
+			height:13px;
+			margin-right: 6px;
+			background-color:#fff;
+		}
 	}
 	ul{
 		padding:$padding;
+		height:14rem;
+		overflow:auto;
 		li{
 			padding:0.25em 0;
 			font-size:0.8em;
@@ -71,7 +78,7 @@ li.feed{
 			&.read a{ @include read; }
 		}
 	}
-	.markRead, .deleteFeed{
+	.feed-action{
 		position:absolute;
 		bottom: 0.5rem;
 		color:#ccc;
@@ -84,6 +91,9 @@ li.feed{
 	}
 	.markRead{
 		left: 0.5rem;
+	}
+	.refresh{
+		left: 2.5rem;
 	}
 	.deleteFeed{
 		right: 0.5rem;

@@ -2,7 +2,7 @@ describe("UI", function() {
 	var ui;
 	beforeEach(function(done) {
 		var data = fixture.sampleDataOne;
-		ui = frontpage.getUI(document.getElementById('feedUI'));
+		ui = frontpage.getUI(document.getElementById('feedUI'), { max_title_length: 40 });
 		ui.init(data, function () {	done (); });
 	});
 
@@ -62,6 +62,27 @@ describe("UI", function() {
 		$feed.find(".deleteFeed").trigger ('click');
 		expect(handler).toHaveBeenCalledWith($feed.attr ('data-feedurl'));
 		expect($("#feedUI .feed").length).toEqual (feedCount - 1);
+	});
+
+	it("triggers the 'refreshFeed' event when a feed is refreshed", function () {
+		var handler = jasmine.createSpy ('handler');
+		ui.bind('refreshFeed', handler);
+
+		var feedCount = $("#feedUI .feed").length;
+		var $feed = $("#feedUI .feed").first ();
+		$feed.find(".refresh").trigger ('click');
+		expect(handler).toHaveBeenCalledWith($feed.attr ('data-feedurl'));
+		expect($feed.find ('ul li').length).toEqual (0);
+	});
+
+	it("truncates the article title where appropriate", function () {
+		var data = $.extend(true, {}, fixture.sampleDataOne);
+		var $feed = $("#feedUI .feed").first ();
+		var wholeTitle = $feed.find ('li a').eq(0).text ();
+		var truncatedTitle = $feed.find ('li a').eq(2).text ();
+		expect(wholeTitle).toEqual (data.feeds[0].items[0].title);
+		expect(truncatedTitle.length).toBeLessThan (data.feeds[0].items[2].title.length);
+		expect(truncatedTitle.length).toEqual (40);
 	});
 
 	it("can be updated when the data changes", function () {
