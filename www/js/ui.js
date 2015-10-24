@@ -115,6 +115,10 @@
 			ui.trigger ('refreshFeed', url);
 			e.preventDefault ();
 		});
+
+		$(window).on ('focus', function () {
+			ui.trigger ('windowFocused', null);
+		});
 		
 		$(container).find ('ul.feeds').sortable ({
 			update: function () {
@@ -140,6 +144,7 @@
 			feedDeleted: function(item_url) {},
 			feedsSorted: function(feed_urls) {},
 			refreshFeed: function(feed_url) {},
+			windowFocused: function() {}
 		};
 	}
 	UI.prototype.init = function(data, callback) {

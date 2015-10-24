@@ -89,7 +89,7 @@ li.feed {
     padding: 0.3rem; }
 
   li.feed {
-    max-width: 0; }
+    max-width: 400px; }
 
   .newFeedUI input {
     width: 240px; } }

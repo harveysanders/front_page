@@ -16,6 +16,7 @@
 		this.ui.bindEvent ('feedRead', this.markFeedRead.bind(this));
 		this.ui.bindEvent ('feedsSorted', this.sortFeeds.bind(this));
 		this.ui.bindEvent ('refreshFeed', this.refreshFeed.bind(this));
+		this.ui.bindEvent ('windowFocused', this.refreshFeeds.bind(this));
 	}
 	Controller.prototype.run = function () {
 		this.data = this.dataStore.loadFeeds ();
@@ -44,7 +45,7 @@
 	};
 	Controller.prototype.refreshFeeds = function (queue) {
 		//	if queue is not passed, it means refresh all
-		if (typeof queue === 'undefined') {
+		if (typeof queue === 'undefined' || queue === null) {
 			queue = [];
 			var now = Math.floor(Date.now() / 1000);
 			for (var i = 0; i < this.data.feeds.length; i++) {
