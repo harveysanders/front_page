@@ -1,8 +1,11 @@
+var UI = require ("../../src/ui")
+var fixture = require ("../fixtures")
+
 describe("UI", function() {
 	var ui;
 	beforeEach(function(done) {
 		var data = fixture.sampleDataOne;
-		ui = frontpage.getUI(document.getElementById('feedUI'), { max_title_length: 40 });
+		ui = new UI (document.getElementById('feedUI'), { max_title_length: 40 });
 		ui.init(data, function () {	done (); });
 	});
 

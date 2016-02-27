@@ -3,27 +3,13 @@
 <head>
 	<title>Front Page</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
-	<script type="text/javascript" src="js/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="js/data_store.js"></script>
-	<script type="text/javascript" src="js/ui.js"></script>
-	<script type="text/javascript" src="js/rss.js"></script>
-	<script type="text/javascript" src="js/dataset.js"></script>
-	<script type="text/javascript" src="js/controller.js"></script>
 	<link rel="stylesheet" media="all" href="css/main.css" />
 	<link rel="stylesheet" media="all" href="css/font-awesome.min.css" />
 	<link href='https://fonts.googleapis.com/css?family=Olswald:400|Open+Sans:700,400' rel='stylesheet' type='text/css'>
 </head>
 <body>
 	<div id="feedUI"></div>
-
-	<script type="text/javascript">
-		var controller = frontpage.getController ({
-			dataStore:	frontpage.getDataStore(),
-			ui:			frontpage.getUI(document.getElementById ('feedUI')),
-			rss:		frontpage.getRSS()
-		});
-		controller.run ();
-	</script>
+	<script type="text/javascript" src="vendor.js" charset="utf-8"></script>
+	<script type="text/javascript" src="bundle.js" charset="utf-8"></script>
 </body>
 </html>

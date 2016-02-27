@@ -1,17 +1,20 @@
+var DataStore = require ("../../src/data_store")
+var fixture = require ("../fixtures")
+
 describe("Data Store", function() {
 	//	init
 	var store1, store2;
-	var sampleFeed = window.fixture.sampleFeedOne;
+	var sampleFeed = fixture.sampleFeedOne;
 	beforeEach(function() {
-		store1 = frontpage.getDataStore ('test1');
+		store1 = new DataStore ('test1');
 		store1.clearFeeds ();
 
-		store2 = frontpage.getDataStore ('test2');
+		store2 = new DataStore ('test2');
 		store2.clearFeeds ();
 	});
 
 	it("should load the 'main' profile when none is provided", function() {
-		var mainStore = frontpage.getDataStore ();
+		var mainStore = new DataStore ();
 		var feedData = mainStore.loadFeeds ();
 		expect (feedData.profile).toEqual ('main');
 	});

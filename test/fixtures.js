@@ -1,4 +1,4 @@
-window.fixture = {
+var fixture = {
 	sampleFeedOne : {
 		title: "Coding Horror",
 		description: "programming and human factors",
@@ -26,8 +26,10 @@ window.fixture = {
 		} ]
 	}
 }
-window.fixture.sampleDataOne = {
+fixture.sampleDataOne = {
 	version: 1,
 	profile: 'main',
 	feeds: [ fixture.sampleFeedOne ]
 };
+
+module.exports = fixture;
