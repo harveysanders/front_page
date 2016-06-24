@@ -20,6 +20,7 @@
     "url": "https://github.com/harveysanders/front_page/issues"
   },
   "dependencies": {
-    "script-loader": "~0.6.1"
+    "script-loader": "~0.6.1",
+    "webpack": "~1.12.14"
   }
 }
